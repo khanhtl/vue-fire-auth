@@ -7,7 +7,7 @@
           <div class="card-body">
             <div v-if="error" class="alert alert-danger">{{ error }}</div>
             <form action="#" @submit.prevent="Login">
-              <div class="form-group row">
+              <div class="form-group row mb-4">
                 <label for="email" class="col-md-4 col-form-label text-md-right"
                   >Email</label
                 >
@@ -45,9 +45,12 @@
                 </div>
               </div>
 
-              <div class="form-group row mb-0">
-                <div class="col-md-8 offset-md-4">
-                  <button type="submit" class="btn btn-primary">Login</button>
+              <div class="d-flex mt-4 align-items-center justify-content-center">
+                <div>
+                  <button type="submit" class="btn btn-primary me-3">Login</button>
+                </div>
+                <div>
+                  <button @click="logInGoogle" type="button" class="btn btn-primary">Login with google</button>
                 </div>
               </div>
             </form>
@@ -81,4 +84,13 @@ const Login = async () => {
     error.value = err.message;
   }
 };
+
+async function logInGoogle() {
+    try {
+    await store.logInGoogle()
+    router.push("/");
+  } catch (err: any) {
+    error.value = err.message;
+  }
+}
 </script>

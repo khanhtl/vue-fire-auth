@@ -6,7 +6,8 @@ import {
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { auth } from "../firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider } from 'firebase/auth'
 
 export const useAuthStore = defineStore("counter", () => {
   const user = ref({
@@ -37,6 +38,16 @@ export const useAuthStore = defineStore("counter", () => {
     }
   }
 
+  async function logInGoogle() {
+    const googleAuthProvider=new GoogleAuthProvider()
+    const response=await signInWithPopup(auth, googleAuthProvider);
+    if (response) {
+      user.value.data = response.user;
+    } else {
+      throw new Error("login failed");
+    }
+  }
+
   async function logOut() {
     await signOut(auth);
     user.value.data = null;
@@ -53,5 +64,5 @@ export const useAuthStore = defineStore("counter", () => {
       user.value.data = null;
     }
     }
-  return {user, fetchUser, register, logOut, logIn}
+  return {user, fetchUser, register, logOut, logIn, logInGoogle}
 });
